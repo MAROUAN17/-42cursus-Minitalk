@@ -28,8 +28,10 @@ int check_null_terminator(char *string)
 
 void    display_character(char *string)
 {
+    int i;
     int asci_char;
 
+    i = 0;
     asci_char = ft_atoi_base(string);
     ft_printf("%c", asci_char);
 }
@@ -37,20 +39,16 @@ void    display_character(char *string)
 void    decrypt_message(int signum, siginfo_t *info, void *context)
 {
     int         allZeros;
-    char        *tmp;
     static char byte[9];
     static int  index;
 
-    tmp = context;
-    if(index < 8)
-    {
-        if(signum == SIGUSR1)
-            byte[index] = '1';
-        else if(signum == SIGUSR2)
-            byte[index] = '0';
-        index++;
-    }
-    if(index == 8)    
+    (void)context;
+    if(signum == SIGUSR1)
+        byte[index] = '1';
+    else if(signum == SIGUSR2)    
+        byte[index] = '0';
+    index++;
+    if(index == 8)
     {
         byte[index] = '\0';
         allZeros = check_null_terminator(byte);
@@ -74,7 +72,6 @@ int main()
     sigaction(SIGUSR1, &sa, NULL);
     sigaction(SIGUSR2, &sa, NULL);
     while(1)
-    {
-    }
+        pause();
     return (0);
 }
