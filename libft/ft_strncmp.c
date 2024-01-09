@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maglagal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/06 14:56:31 by maglagal          #+#    #+#             */
-/*   Updated: 2024/01/08 20:50:06 by maglagal         ###   ########.fr       */
+/*   Created: 2023/11/01 15:16:37 by maglagal          #+#    #+#             */
+/*   Updated: 2023/11/10 13:54:55 by maglagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#include "libft.h"
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <signal.h>
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
 
-int			ft_atoi(const char *str);
-int			ft_printf(const char *format, ...);
-size_t		ft_strlen(const char *s);
-void        *ft_memset(void *b, int c, size_t len);
-int         expected_bytes(char *binary);
-
-#endif
+	i = 0;
+	if (n == 0)
+		return (0);
+	while (s1[i] && s2[i] && s1[i] == s2[i] && i < n - 1)
+		i++;
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}

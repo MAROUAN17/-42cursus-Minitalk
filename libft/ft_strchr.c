@@ -1,26 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maglagal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/06 14:56:31 by maglagal          #+#    #+#             */
-/*   Updated: 2024/01/08 20:50:06 by maglagal         ###   ########.fr       */
+/*   Created: 2023/11/01 12:43:45 by maglagal          #+#    #+#             */
+/*   Updated: 2023/11/10 13:52:34 by maglagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#include "libft.h"
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <signal.h>
+char	*ft_strchr(const char *s, int c)
+{
+	size_t			i;
+	unsigned char	cc;
+	char			*p;
 
-int			ft_atoi(const char *str);
-int			ft_printf(const char *format, ...);
-size_t		ft_strlen(const char *s);
-void        *ft_memset(void *b, int c, size_t len);
-int         expected_bytes(char *binary);
-
-#endif
+	i = 0;
+	cc = (unsigned char)c;
+	while (s[i])
+	{
+		if (s[i] == cc)
+		{
+			p = (char *)s + i;
+			while (s[i])
+				i++;
+			return (p);
+		}
+		else
+			i++;
+	}
+	if (cc == '\0')
+		return ((char *)s + i);
+	return (0);
+}

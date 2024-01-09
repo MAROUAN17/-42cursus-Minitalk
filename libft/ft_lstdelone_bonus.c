@@ -1,26 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maglagal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/06 14:56:31 by maglagal          #+#    #+#             */
-/*   Updated: 2024/01/08 20:50:06 by maglagal         ###   ########.fr       */
+/*   Created: 2023/11/07 14:42:44 by maglagal          #+#    #+#             */
+/*   Updated: 2023/11/08 20:22:25 by maglagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#include "libft.h"
+#include <stdlib.h>
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <signal.h>
-
-int			ft_atoi(const char *str);
-int			ft_printf(const char *format, ...);
-size_t		ft_strlen(const char *s);
-void        *ft_memset(void *b, int c, size_t len);
-int         expected_bytes(char *binary);
-
-#endif
+void	ft_lstdelone(t_list *lst, void (*del)(void *))
+{
+	if (!lst || !del)
+		return ;
+	del(lst->content);
+	free(lst);
+}

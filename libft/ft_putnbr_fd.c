@@ -1,26 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maglagal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/06 14:56:31 by maglagal          #+#    #+#             */
-/*   Updated: 2024/01/08 20:50:06 by maglagal         ###   ########.fr       */
+/*   Created: 2023/11/03 18:31:38 by maglagal          #+#    #+#             */
+/*   Updated: 2023/11/10 13:51:34 by maglagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#include "libft.h"
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <signal.h>
+void	ft_putnbr_fd(int n, int fd)
+{
+	char	s;
+	long	ln;
 
-int			ft_atoi(const char *str);
-int			ft_printf(const char *format, ...);
-size_t		ft_strlen(const char *s);
-void        *ft_memset(void *b, int c, size_t len);
-int         expected_bytes(char *binary);
-
-#endif
+	ln = (long)n;
+	if (n < 0)
+	{
+		ln = -ln;
+		write(fd, "-", 1);
+	}
+	if (ln >= 10)
+	{
+		ft_putnbr_fd(ln / 10, fd);
+		ft_putnbr_fd(ln % 10, fd);
+	}
+	else
+	{
+		s = ln + '0';
+		ft_putchar_fd(s, fd);
+	}
+}

@@ -1,26 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maglagal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/06 14:56:31 by maglagal          #+#    #+#             */
-/*   Updated: 2024/01/08 20:50:06 by maglagal         ###   ########.fr       */
+/*   Created: 2023/10/31 19:16:50 by maglagal          #+#    #+#             */
+/*   Updated: 2023/11/10 13:50:51 by maglagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#include "libft.h"
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <signal.h>
+void	*ft_memmove(void *dst, const void *src, size_t len)
+{
+	char		*sr;
+	char		*dest;
+	size_t		i;
 
-int			ft_atoi(const char *str);
-int			ft_printf(const char *format, ...);
-size_t		ft_strlen(const char *s);
-void        *ft_memset(void *b, int c, size_t len);
-int         expected_bytes(char *binary);
-
-#endif
+	i = 0;
+	dest = (char *)dst;
+	sr = (char *)src;
+	if (dest == sr)
+		return (dest);
+	if (dest > sr)
+	{
+		while (len--)
+			dest[len] = sr[len];
+	}
+	else
+	{
+		while (i < len)
+		{
+			dest[i] = sr[i];
+			i++;
+		}
+	}
+	return (dst);
+}

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maglagal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/06 14:12:49 by maglagal          #+#    #+#             */
-/*   Updated: 2024/01/08 20:51:02 by maglagal         ###   ########.fr       */
+/*   Created: 2024/01/06 14:12:40 by maglagal          #+#    #+#             */
+/*   Updated: 2024/01/08 20:56:22 by maglagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "header_bonus.h"
 
 static int	uni_index = 0;
 void	display_unicode(int *isunicode, int *asci_char, int bits)
@@ -34,15 +34,17 @@ void	display_unicode(int *isunicode, int *asci_char, int bits)
 	}
 }
 
-void	display_character(char *string)
+void	display_character(char *string, siginfo_t *info)
 {
 	int			i;
+	int			asci_char;
 	int			bits;
 	static int	isunicode = 0;
-	int			asci_char;
 
 	i = 0;
 	asci_char = 0;
+	if(check_null_terminator(string) == 8)
+		kill(info->si_pid, SIGUSR1);
 	if(uni_index == 0)
 		bits = expected_bytes(string);
 	while ((*(string + i) == '0' || *(string + i) == '1'))
@@ -73,32 +75,32 @@ void	decrypt_message(int signum, siginfo_t *info, void *context)
 	if (signum == SIGUSR1)
 		byte[index] = '1';
 	else if (signum == SIGUSR2)
-		byte[index] = '0';	
+		byte[index] = '0';
 	index++;
 	if (index == 8)
 	{
 		byte[index] = '\0';
-		display_character(byte);
+		display_character(byte, info);
 		index = 0;
 	}
 }
 
 int	main(void)
 {
-	struct sigaction	sa1;
-	sigset_t			signals;
 	pid_t				pid;
+	sigset_t			signals;
+	struct sigaction	sa;
 
 	pid = getpid();
 	ft_printf("PID -> %d\n", pid);
 	sigemptyset(&signals);
 	sigaddset(&signals, SIGUSR1);
 	sigaddset(&signals, SIGUSR2);
-	sa1.sa_mask = signals;
-	sa1.sa_flags = SA_SIGINFO;
-	sa1.sa_sigaction = decrypt_message;
-	sigaction(SIGUSR1, &sa1, NULL);
-	sigaction(SIGUSR2, &sa1, NULL);
+	sa.sa_mask = signals;
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = decrypt_message;
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
 	while (1)
 		pause();
 	return (0);

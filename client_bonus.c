@@ -1,16 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maglagal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/02 11:13:21 by maglagal          #+#    #+#             */
-/*   Updated: 2024/01/09 10:35:54 by maglagal         ###   ########.fr       */
+/*   Created: 2024/01/06 14:12:21 by maglagal          #+#    #+#             */
+/*   Updated: 2024/01/09 10:39:02 by maglagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "header_bonus.h"
+
+void	acknowledgement(int signum)
+{
+	if (signum == SIGUSR1)
+		ft_printf("from the server!!");
+}
 
 void	send_to_server(pid_t pid, char *binary)
 {
@@ -41,18 +47,18 @@ void	null_terminating(pid_t pid)
 	}
 }
 
-void	encrypt_and_send(char *string, pid_t pid)
+void	encrypt_message_and_send(char *string, pid_t pid)
 {
 	int		iter;
-	int     i;
-	char    bit;
+	int		i;
+	char	bit;
 	char	byte[9];
 
 	i = 0;
 	while (*(string + i))
 	{
 		iter = 7;
-		while(iter >= 0)
+		while (iter >= 0)
 		{
 			bit = (*(string + i) >> iter) & 1;
 			if (bit == 1)
@@ -61,7 +67,7 @@ void	encrypt_and_send(char *string, pid_t pid)
 				byte[7 - iter] = '0';
 			iter--;
 		}
-		byte[iter - 7] = '\0';
+		byte[7 - iter] = '\0';
 		send_to_server(pid, byte);
 		i++;
 	}
@@ -70,13 +76,15 @@ void	encrypt_and_send(char *string, pid_t pid)
 
 int	main(int ac, char **av)
 {
+	struct sigaction	sa;
 	pid_t				pid;
 
 	if (ac == 3)
 	{
+		sa.sa_handler = &acknowledgement;
+		sigaction(SIGUSR1, &sa, NULL);
 		pid = ft_atoi(av[1]);
-		if(pid > 1)
-			encrypt_and_send(av[2], pid);
+		encrypt_message_and_send(av[2], pid);
 	}
 	else
 		ft_printf("insufficient arguments!!\n");

@@ -1,26 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maglagal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/06 14:56:31 by maglagal          #+#    #+#             */
-/*   Updated: 2024/01/08 20:50:06 by maglagal         ###   ########.fr       */
+/*   Created: 2023/11/04 12:57:29 by maglagal          #+#    #+#             */
+/*   Updated: 2024/01/07 11:51:43 by maglagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#include "libft.h"
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <signal.h>
+size_t	ft_strlcpy(char *dst, const char *src,
+			size_t dstsize)
+{
+	size_t	i;
+	char	*dest;
+	char	*sr;
 
-int			ft_atoi(const char *str);
-int			ft_printf(const char *format, ...);
-size_t		ft_strlen(const char *s);
-void        *ft_memset(void *b, int c, size_t len);
-int         expected_bytes(char *binary);
-
-#endif
+	i = 0;
+	dest = (char *)dst;
+	sr = (char *)src;
+	while (i < dstsize - 1 && sr[i] && dstsize != 0)
+	{
+		dest[i] = sr[i];
+		i++;
+	}
+	if (dstsize != 0)
+		dest[i] = '\0';
+	i = 0;
+	while (sr[i])
+		i++;
+	return (i);
+}

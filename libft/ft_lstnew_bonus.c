@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maglagal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/06 14:56:31 by maglagal          #+#    #+#             */
-/*   Updated: 2024/01/08 20:50:06 by maglagal         ###   ########.fr       */
+/*   Created: 2023/11/06 13:54:57 by maglagal          #+#    #+#             */
+/*   Updated: 2024/01/07 11:50:48 by maglagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#include "libft.h"
+#include <stdlib.h>	
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <signal.h>
+t_list	*ft_lstnew(void *content)
+{
+	t_list	*newn;
 
-int			ft_atoi(const char *str);
-int			ft_printf(const char *format, ...);
-size_t		ft_strlen(const char *s);
-void        *ft_memset(void *b, int c, size_t len);
-int         expected_bytes(char *binary);
-
-#endif
+	newn = (t_list *)malloc(sizeof(t_list));
+	if (!newn)
+		return (NULL);
+	if (!content)
+		newn->content = NULL;
+	else
+		newn->content = content;
+	newn->next = (0);
+	return (newn);
+}

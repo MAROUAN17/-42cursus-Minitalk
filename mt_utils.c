@@ -1,26 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   mt_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maglagal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/06 14:56:31 by maglagal          #+#    #+#             */
-/*   Updated: 2024/01/08 20:50:06 by maglagal         ###   ########.fr       */
+/*   Created: 2024/01/08 20:48:06 by maglagal          #+#    #+#             */
+/*   Updated: 2024/01/08 20:48:07 by maglagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+int	expected_bytes(char *binary)
+{
+	int bits;
+	int index;
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <signal.h>
+	index = 0;
+	bits = 0;
+	while(*(binary + index) && *(binary + index) == '1')
+	{	
+		bits++;
+		index++;
+	}
+	return (bits);
+}
 
-int			ft_atoi(const char *str);
-int			ft_printf(const char *format, ...);
-size_t		ft_strlen(const char *s);
-void        *ft_memset(void *b, int c, size_t len);
-int         expected_bytes(char *binary);
+int	check_null_terminator(char *string)
+{
+	int	i;
+	int	all_zeros;
 
-#endif
+	i = 0;
+	all_zeros = 0;
+	while (*(string + i) && *(string + i) == '0')
+	{
+		all_zeros++;
+		i++;
+	}
+	return (all_zeros);
+}
