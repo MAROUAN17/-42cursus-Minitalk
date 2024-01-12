@@ -6,7 +6,7 @@
 /*   By: maglagal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:13:21 by maglagal          #+#    #+#             */
-/*   Updated: 2024/01/09 10:35:54 by maglagal         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:41:50 by maglagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,17 @@ void	send_to_server(pid_t pid, char *binary)
 	while (*(binary + index))
 	{
 		if (*(binary + index) == '1')
-			kill(pid, SIGUSR1);
+		{
+			if (kill(pid, SIGUSR1) != 0)
+				exit(1);
+		}
 		else if (*(binary + index) == '0')
-			kill(pid, SIGUSR2);
+		{
+			if (kill(pid, SIGUSR2) != 0)
+				exit(1);
+		}
 		index++;
-		usleep(200);
+		usleep(500);
 	}
 }
 
@@ -35,24 +41,25 @@ void	null_terminating(pid_t pid)
 	index = 0;
 	while (index < 8)
 	{
-		kill(pid, SIGUSR2);
+		if (kill(pid, SIGUSR2) != 0)
+			exit(1);
 		index++;
-		usleep(200);
+		usleep(500);
 	}
 }
 
 void	encrypt_and_send(char *string, pid_t pid)
 {
 	int		iter;
-	int     i;
-	char    bit;
+	int		i;
+	char	bit;
 	char	byte[9];
 
 	i = 0;
 	while (*(string + i))
 	{
 		iter = 7;
-		while(iter >= 0)
+		while (iter >= 0)
 		{
 			bit = (*(string + i) >> iter) & 1;
 			if (bit == 1)
@@ -61,7 +68,7 @@ void	encrypt_and_send(char *string, pid_t pid)
 				byte[7 - iter] = '0';
 			iter--;
 		}
-		byte[iter - 7] = '\0';
+		byte[7 - iter] = '\0';
 		send_to_server(pid, byte);
 		i++;
 	}
@@ -74,11 +81,22 @@ int	main(int ac, char **av)
 
 	if (ac == 3)
 	{
-		pid = ft_atoi(av[1]);
-		if(pid > 1)
+		if (check_pid(av[1]) == 1)
+		{
+			ft_printf("Incorrect PID!");
+			exit(1);
+		}
+		else
+			pid = ft_atoi(av[1]);
+		if (pid > 1)
 			encrypt_and_send(av[2], pid);
+		else
+		{
+			ft_printf("Incorrect PID!");
+			exit(1);
+		}
 	}
 	else
-		ft_printf("insufficient arguments!!\n");
+		ft_printf("Insufficient Arguments!!\n");
 	return (0);
 }
